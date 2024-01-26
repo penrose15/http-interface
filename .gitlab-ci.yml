@@ -1,0 +1,15 @@
+before_script:
+  - echo "> script start"
+  - pwd
+
+stages:
+  - build
+
+build:
+  stage: build
+  only:
+    - main
+  script:
+    - echo "> build start"
+    - chmod +x gradlew
+    - ./gradlew build
