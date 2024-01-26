@@ -34,5 +34,6 @@ docker-build:
     DOCKER_PW: "$DOCKER_PASSWORD"
   before_script:
     - docker login -u "$DOCKER_USER" -p "$DOCKER_PW"
+    - apk update && apk add git
   script:
     - docker build -t $DOCKER_USER/test .
