@@ -1,6 +1,6 @@
 FROM openjdk:21
 
-RUN echo ${pwd} && la -lR
-COPY ./api1/build/libs ./app.jar
+RUN pwd
+COPY ./build/libs ./app1
 
-ENTRYPOINT ["java","-jar","./app.jar"]
+ENTRYPOINT ["java","-jar","./app1/api1.jar"]
