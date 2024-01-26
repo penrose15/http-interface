@@ -1,3 +1,5 @@
 bootJar {
     archiveFileName = 'api2.jar'
 }
+
+jar.enabled=false
