@@ -1,3 +1,7 @@
+variables:
+  API1_PATH: "./api1/build/libs/api1-0.0.1-SNAPSHOT.jar"
+  API2_PATH: "./api2/build/libs/api2-0.0.1-SNAPSHOT.jar"
+
 image: gradle:alpine
 
 before_script:
@@ -9,6 +13,7 @@ before_script:
 
 stages:
   - build
+  - package
 
 build:
   stage: build
@@ -18,3 +23,16 @@ build:
     - echo "> build start"
     - chmod +x gradlew
     - ./gradlew build
+
+docker-build:
+  image: docker:latest
+  stage: package
+  services:
+    - docker:dind
+  variables:
+    DOCKER_USER: "$DOCKER_USER"
+    DOCKER_PW: "$DOCKER_PASSWORD"
+  before_script:
+    - docker login -u "$DOCKER_USER" -p "$DOCKER_PW"
+  script:
+    - docker build -t $DOCKER_USER/test .
