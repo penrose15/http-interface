@@ -37,3 +37,5 @@ docker-build:
     - apk update && apk add git
   script:
     - docker-compose up -d
+    - docker push "$DOCKER_USER"/api1:latest
+    - docker push "$DOCKER_USER"/api2:latest
