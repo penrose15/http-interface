@@ -1,11 +1,13 @@
 package com.example.api1.api;
 
 import com.example.api1.httpinterface.ExchangeHttpClient;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +24,15 @@ public class Api1Controller {
     private final ApplicationContext applicationContext;
 
     @GetMapping
-    public String test() {
+    public ResponseEntity<String> test() {
         Environment env = applicationContext.getEnvironment();
         String port = env.getProperty("server.port");
 
         log.info("port : {}",port);
-        return "api1 port : " + port;
+
+        String response = "api1 port : " + port;
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/exchange")
@@ -38,8 +43,10 @@ public class Api1Controller {
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(webClient))
                 .build();
         ExchangeHttpClient exchangeHttpClient = httpServiceProxyFactory.createClient(ExchangeHttpClient.class);
-        String res = exchangeHttpClient.getPortInfo();
+        ResponseEntity<String> res = exchangeHttpClient.getPortInfo();
 
-        return "exchange info from api2 - " + res;
+        String body = res.getBody();
+
+        return "exchange info from api2 - " + body;
     }
 }

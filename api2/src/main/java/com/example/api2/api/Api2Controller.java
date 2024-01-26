@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,12 +21,14 @@ public class Api2Controller {
     private final ApplicationContext applicationContext;
 
     @GetMapping
-    public String test() {
+    public ResponseEntity<String> test() {
         Environment env = applicationContext.getEnvironment();
         String port = env.getProperty("server.port");
 
         log.info("port : {}",port);
-        return "api2 port : " + port;
+        String response = "api2 port : " + port;
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/exchange")
@@ -36,8 +39,10 @@ public class Api2Controller {
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(webClient))
                 .build();
         ExchangeHttpClient exchangeHttpClient = httpServiceProxyFactory.createClient(ExchangeHttpClient.class);
-        String res = exchangeHttpClient.getPortInfo();
+        ResponseEntity<String> res = exchangeHttpClient.getPortInfo();
 
-        return "exchange info from api1 - " + res;
+        res.getHeaders();
+
+        return "exchange info from api1 - " + res.getBody();
     }
 }
