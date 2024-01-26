@@ -1,0 +1,4 @@
+rootProject.name = 'demo'
+include 'api1'
+include 'api2'
+
